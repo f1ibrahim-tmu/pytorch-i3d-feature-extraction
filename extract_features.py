@@ -23,7 +23,7 @@ import pdb
 def load_frame(frame_file, resize=False):
 
     data = Image.open(frame_file)
-
+    
     assert(data.size[1] == 256)
     assert(data.size[0] == 340)
 
@@ -44,6 +44,9 @@ def load_zipframe(zipdata, name, resize=False):
 
     stream = zipdata.read(name)
     data = Image.open(io.BytesIO(stream))
+    
+    #print("data.size=", data.size)
+    data = data.resize((340, 256), Image.ANTIALIAS)
 
     assert(data.size[1] == 256)
     assert(data.size[0] == 340)
@@ -192,7 +195,9 @@ def run(mode='rgb', load_model='', sample_mode='oversample', frequency=16,
         return b_features
 
 
-    video_names = [i for i in os.listdir(input_dir) if i[0] == 'v']
+    # sorted to fix the order, and not in to specify that we don't want the same ones twice
+    #video_names = sorted([i for i in os.listdir(input_dir) if i[0] == 'v'])
+    video_names = sorted([i for i in os.listdir(input_dir) if i[0] == 'v' and i+"-rgb.npz" not in os.listdir(output_dir)])
 
     for video_name in video_names:
 
@@ -205,8 +210,9 @@ def run(mode='rgb', load_model='', sample_mode='oversample', frequency=16,
 
         if mode == 'rgb':
             if usezip:
+                print(frames_dir)
                 rgb_zipdata = zipfile.ZipFile(os.path.join(frames_dir, 'img.zip'), 'r')
-                rgb_files = [i for i in rgb_zipdata.namelist() if i.startswith('img')]
+                rgb_files = [i for i in rgb_zipdata.namelist() if i.endswith('jpg')]
             else:
                 rgb_files = [i for i in os.listdir(frames_dir) if i.startswith('img')]
 
@@ -234,6 +240,8 @@ def run(mode='rgb', load_model='', sample_mode='oversample', frequency=16,
         # clipped_length = (frame_cnt // chunk_size) * chunk_size   # Cut frames
 
         # Cut frames
+        print("frame_cnt=", frame_cnt)
+        print("chunk_size=", chunk_size)
         assert(frame_cnt > chunk_size)
         clipped_length = frame_cnt - chunk_size
         clipped_length = (clipped_length // frequency) * frequency  # The start of last chunk
