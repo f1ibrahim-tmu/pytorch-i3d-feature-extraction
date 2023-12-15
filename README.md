@@ -5,16 +5,19 @@
 * Convert the videos into frame images and optical flows.
 * `python3 extract_features.py ...`
 
+* for specific i5O dataset:
+* `python3 extract_features.py rgb ./models/rgb_imagenet.pt oversample 16 /data/i5O/i5OData/undercover-left/ ./output/i5O/rgb-undercover-left/ 40 False'
+
 ## Parameters
 <pre>
---mode:              rgb or flow
+--mode:              rgb or flow (default 'rgb')
 --load_model:        path of the I3D model
 --input_dir:         folder of converted videos
 --output_dir:        folder of extracted features
---batch_size:        batch size for snippets
---sample_mode:       oversample, center_crop or resize
---frequency:         how many frames between adjacent snippet
---usezip/no-usezip:  whether the frame images are zipped
+--batch_size:        batch size for snippets (default '40')
+--sample_mode:       oversample, center_crop or resize (default 'oversample')
+--frequency:         how many frames between adjacent snippet (default '16')
+--usezip/no-usezip:  whether the frame images are zipped (default 'False')
 </pre>
 
 ## Important: Use PyTorch 0.3
