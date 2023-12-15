@@ -6,7 +6,8 @@
 * `python3 extract_features.py ...`
 
 * for specific i5O dataset:
-* `python3 extract_features.py rgb ./models/rgb_imagenet.pt oversample 16 /data/i5O/i5OData/undercover-left/ ./output/i5O/rgb-undercover-left/ 40 False'
+* * `python3 extract_features.py rgb ./models/rgb_imagenet.pt oversample 16 /data/i5O/i5OData/undercover-left/ ./output/i5O/rgb-undercover-left/ 40 False`
+
 
 ## Parameters
 <pre>
